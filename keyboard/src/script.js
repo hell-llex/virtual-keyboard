@@ -51,3 +51,22 @@ createElem('div', rowsKeys[2], 'prepend', 'key letter', 13);
 createElem('div', rowsKeys[3], 'prepend', 'key letter', 14);
 createElem('div', rowsKeys[4], 'prepend', 'key', 9);
 const	keys = document.querySelectorAll('.key');
+
+for (let posKey in positionfunKey) {
+	if (keys.length !== 0) {
+		let x = posKey - 1;
+		keys[x].className = `key ${positionfunKey[posKey]}`;
+		if (positionfunKey[posKey] === 'symOr') keys[x].innerHTML = '<p>&#92 &#448 &#47</p>';
+		else if (positionfunKey[posKey] === 'space') keys[x].innerHTML = '<p></p>';
+		else if (positionfunKey[posKey] === 'arrow-up') keys[x].innerHTML = '<p>&#9650</p>';
+		else if (positionfunKey[posKey] === 'arrow-left') keys[x].innerHTML = '<p>&#9668</p>';
+		else if (positionfunKey[posKey] === 'arrow-down') keys[x].innerHTML = '<p>&#9660</p>';
+		else if (positionfunKey[posKey] === 'arrow-right') keys[x].innerHTML = '<p>&#9658</p>';
+		else keys[x].innerHTML = `<p>${positionfunKey[posKey].toUpperCase()}</p>`;
+	}
+}
+
+const	keysLeter = document.querySelectorAll('.letter');
+const	keysNumber = document.querySelectorAll('.number');
+fillKeys(lettersEn, keysLeter);
+fillKeys(numbers, keysNumber);
