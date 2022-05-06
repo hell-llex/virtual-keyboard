@@ -68,5 +68,30 @@ for (let posKey in positionfunKey) {
 
 const	keysLeter = document.querySelectorAll('.letter');
 const	keysNumber = document.querySelectorAll('.number');
-fillKeys(lettersEn, keysLeter);
+
+let lang = 'en';
+
+if (localStorage.getItem('lang') === null) localStorage.setItem('lang', lang);
+else lang = localStorage.getItem('lang');
+
+function	swichLang() {
+	if (lang === 'en') {
+		fillKeys(lettersEn, keysLeter);
+		btnLang.innerHTML = '<p>English</p>';
+		btnLang.classList.add('en');
+	} else {
+		fillKeys(lettersRu, keysLeter);
+		btnLang.innerHTML = '<p>Русский</p>';
+		btnLang.classList.add('ru');
+	}
+	localStorage.setItem('lang', lang);
+}
+
+swichLang();
 fillKeys(numbers, keysNumber);
+
+// btnLang.classList.add('en');
+btnLang.addEventListener('click', () => {
+	if (lang === 'en') lang = 'ru'; else lang = 'en';
+	swichLang();
+});
