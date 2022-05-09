@@ -16,5 +16,6 @@ module.exports = {
 		'no-tabs': 'off',
 		'linebreak-style': 'off',
 		indent: [2, 'tab'],
+		'no-restricted-syntax': 'off',
 	},
 };
