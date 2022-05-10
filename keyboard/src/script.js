@@ -1,10 +1,15 @@
 const	lettersRu = ['ё', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.'];
-const	lettersEn = ['`', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'z', 'x', 'c', 'v', 'b', 'n', 'm', ', ', '.', '/'];
+const	lettersEn = ['`', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/'];
 const	keysCode = ['Escape', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace', 'Tab', 'KeyQ', 'KeyW', 'KeyE',
 	'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL',
 	'Semicolon', 'Quote', 'Enter', 'ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ShiftRight', 'ArrowUp', 'Delete', 'ControlLeft',
 	'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ControlRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight'];
+
 const	numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '='];
+const	numbersru = ['!', '"', '№', ';', '%', ':', '?', '*', '(', ')', '_', '+'];
+const	numbersen = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+'];
+const	symbols = ['~', '', '', '', '', '', '', '', '', '', '', '{', '}', '', '', '', '', '', '', '', '', '', ':', '"', '', '', '', '', '', '', '', '<', '>', '?'];
+
 const	positionfunKey = {
 	14: 'backspace', 15: 'tab', 28: 'symOr', 29: 'capslock', 41: 'enter', 42: 'shift', 53: 'shift', 54: 'arrow-up', 55: 'del', 56: 'ctrl', 57: 'win', 58: 'alt', 59: 'space', 60: 'alt', 61: 'ctrl', 62: 'arrow-left', 63: 'arrow-down', 64: 'arrow-right',
 };
@@ -16,9 +21,6 @@ const	keyboard = document.querySelector('.keyboard');
 const	input = document.querySelector('.input-area');
 const	adminInfo = document.querySelector('.info-keyboard');
 const	btnLang = document.querySelector('.swich-lang');
-
-// eslint-disable-next-line prefer-destructuring
-// const 	log = console.log;
 
 function createElem(a, b, c, f, n) {
 	// a = какой тег создаем и вставляем, строка;
@@ -34,23 +36,6 @@ function createElem(a, b, c, f, n) {
 		else if (c === 'prepend') b.prepend(elem);
 		else if (c === 'before') b.before(elem);
 		else if (c === 'after') b.after(elem);
-	}
-}
-
-function fillKeys(a, b, c) {
-	// a = параметр для заполнения(чем заполнять)
-	// b = параметр который заполняется(что заполнять)
-	// c = заглавные и строчные "up, low"
-	if (c === 'up') {
-		b.forEach((item, i) => {
-			const elem = item;
-			elem.innerHTML = `<p>${a[i].toUpperCase()}</p>`;
-		});
-	} else {
-		b.forEach((item, i) => {
-			const elem = item;
-			elem.innerHTML = `<p>${a[i]}</p>`;
-		});
 	}
 }
 
@@ -94,14 +79,48 @@ let lang = 'en';
 if (localStorage.getItem('lang') === null) localStorage.setItem('lang', lang);
 else lang = localStorage.getItem('lang');
 
+function fillKeys(a, b, c) {
+	// a = параметр для заполнения(чем заполнять)
+	// b = параметр который заполняется(что заполнять)
+	// c = заглавные и строчные "up, low"
+	if (c === 'up') {
+		if (b === keysNumber) {
+			b.forEach((item, i) => {
+				const elem = item;
+				elem.innerHTML = `<p>${a[i]}</p>`;
+			});
+		} else {
+			b.forEach((item, i) => {
+				const elem = item;
+				if ((i === 0 || i === 11 || i === 12 || i === 22
+					|| i === 23 || i === 31 || i === 32 || i === 33) && lang === 'en') {
+					elem.innerHTML = `<p>${symbols[i]}</p>`;
+				} else {
+					elem.innerHTML = `<p>${a[i].toUpperCase()}</p>`;
+					if (i === 33) elem.innerHTML = '<p>,</p>';
+				}
+			});
+		}
+	} else {
+		b.forEach((item, i) => {
+			const elem = item;
+			elem.innerHTML = `<p>${a[i]}</p>`;
+		});
+	}
+}
+
 function	swichLang(a) {
 	// a = или up или low
 	if (lang === 'en') {
 		fillKeys(lettersEn, keysLeter, a);
+		if (a === 'up') fillKeys(numbersen, keysNumber, a);
+		else fillKeys(numbers, keysNumber, a);
 		btnLang.innerHTML = '<p>English</p>';
 		btnLang.classList.add('en');
 	} else {
 		fillKeys(lettersRu, keysLeter, a);
+		if (a === 'up') fillKeys(numbersru, keysNumber, a);
+		else fillKeys(numbers, keysNumber, a);
 		btnLang.innerHTML = '<p>Русский</p>';
 		btnLang.classList.add('ru');
 	}
@@ -109,7 +128,6 @@ function	swichLang(a) {
 }
 
 swichLang('low');
-fillKeys(numbers, keysNumber, 'low');
 
 btnLang.addEventListener('click', () => {
 	if (lang === 'en') lang = 'ru'; else lang = 'en';
@@ -136,7 +154,8 @@ keyboard.addEventListener('click', (event) => {
 		input.selectionStart = startSel;
 		input.selectionEnd = startSel;
 		if (document.querySelector('.shift').classList.contains('active-up')) {
-			document.querySelector('.shift').classList.remove('active-up');
+			document.querySelector('.shift[data-keycode = ShiftLeft]').classList.remove('active-up');
+			document.querySelector('.shift[data-keycode = ShiftRight]').classList.remove('active-up');
 			swichLang('low');
 		}
 	} else if (event.target.closest('.key.backspace') || event.target.closest('.key.del')) {
@@ -177,12 +196,17 @@ keyboard.addEventListener('click', (event) => {
 			swichLang('up');
 		} else swichLang('low');
 	} else if (event.target.closest('.key.shift')) {
-		event.target.closest('.key.shift').classList.toggle('active-up');
+		document.querySelector('.shift[data-keycode = ShiftLeft]').classList.toggle('active-up');
+		document.querySelector('.shift[data-keycode = ShiftRight]').classList.toggle('active-up');
 		if (event.target.closest('.key.shift').classList.contains('active-up')) {
 			swichLang('up');
 		} else swichLang('low');
 	} else if (event.target.closest('.key.symOr')) {
-		input.value = `${input.value.substring(0, startSel)}\\${input.value.substring(endSel)}`;
+		if (document.querySelector('.shift').classList.contains('active-up') && lang === 'en') {
+			input.value = `${input.value.substring(0, startSel)}|${input.value.substring(endSel)}`;
+		} else if (document.querySelector('.shift').classList.contains('active-up') && lang === 'ru') {
+			input.value = `${input.value.substring(0, startSel)}/${input.value.substring(endSel)}`;
+		} else input.value = `${input.value.substring(0, startSel)}\\${input.value.substring(endSel)}`;
 		startSel += 1;
 		endSel += 1;
 		input.selectionStart = startSel;
@@ -228,10 +252,13 @@ keyboard.addEventListener('click', (event) => {
 		if (document.querySelector('.capslock').classList.contains('active-up') || document.querySelector('.shift').classList.contains('active-up')) {
 			swichLang('up');
 		} else swichLang('low');
-		document.querySelector('.shift').classList.remove('active-up');
+		document.querySelector('.shift[data-keycode = ShiftLeft]').classList.remove('active-up');
+		document.querySelector('.shift[data-keycode = ShiftRight]').classList.remove('active-up');
 		swichLang('low');
-	} if (event.target.closest('.key') && document.querySelector('.shift').classList.contains('active-up') && !event.target.closest('.key.shift')) {
-		document.querySelector('.shift').classList.remove('active-up');
+	}
+	if (event.target.closest('.key') && document.querySelector('.shift').classList.contains('active-up') && !event.target.closest('.key.shift')) {
+		document.querySelector('.shift[data-keycode = ShiftLeft]').classList.remove('active-up');
+		document.querySelector('.shift[data-keycode = ShiftRight]').classList.remove('active-up');
 		swichLang('low');
 	}
 });
