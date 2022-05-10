@@ -40,8 +40,8 @@ body {
 }
 .info-keyboard {
     font-family: 'Roboto Mono', monospace;
-    font-size: 22px;
-    line-height: 100%;
+    font-size: 24px;
+    line-height: 130%;
     text-align: center;
     color: black;
 }
@@ -64,7 +64,6 @@ body {
         box-shadow: rgba(240, 46, 170, 0.4) -2px 2px, rgba(240, 46, 170, 0.3) -4px 4px, 
         rgba(240, 46, 170, 0.2) -6px 6px, rgba(240, 46, 170, 0.1) -8px 8px, rgba(240, 46, 170, 0.05) -9px 9px;
         transform: translateX(-3px) translateY(3px);
-        // transition: all 100ms ease-in-out;
     }
     p {
         font-family: 'Roboto Mono', monospace;
@@ -91,9 +90,6 @@ body {
     &::-webkit-scrollbar {
     width: 0;
     }
-    // &.non-focus {
-    //     border: 1px solid red;
-    // }
 }
 .keyboard {
     position: relative;
