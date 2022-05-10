@@ -89,7 +89,7 @@ function fillKeys(a, b, c) {
 				const elem = item;
 				elem.innerHTML = `<p>${a[i]}</p>`;
 			});
-		} else {
+		} else if (document.querySelector('.shift').classList.contains('active-up')) {
 			b.forEach((item, i) => {
 				const elem = item;
 				if ((i === 0 || i === 11 || i === 12 || i === 22
@@ -99,6 +99,11 @@ function fillKeys(a, b, c) {
 					elem.innerHTML = `<p>${a[i].toUpperCase()}</p>`;
 					if (i === 33) elem.innerHTML = '<p>,</p>';
 				}
+			});
+		} else {
+			b.forEach((item, i) => {
+				const elem = item;
+				elem.innerHTML = `<p>${a[i].toUpperCase()}</p>`;
 			});
 		}
 	} else {
@@ -113,13 +118,13 @@ function	swichLang(a) {
 	// a = или up или low
 	if (lang === 'en') {
 		fillKeys(lettersEn, keysLeter, a);
-		if (a === 'up') fillKeys(numbersen, keysNumber, a);
+		if (a === 'up' && document.querySelector('.shift').classList.contains('active-up')) fillKeys(numbersen, keysNumber, a);
 		else fillKeys(numbers, keysNumber, a);
 		btnLang.innerHTML = '<p>English</p>';
 		btnLang.classList.add('en');
 	} else {
 		fillKeys(lettersRu, keysLeter, a);
-		if (a === 'up') fillKeys(numbersru, keysNumber, a);
+		if (a === 'up' && document.querySelector('.shift').classList.contains('active-up')) fillKeys(numbersru, keysNumber, a);
 		else fillKeys(numbers, keysNumber, a);
 		btnLang.innerHTML = '<p>Русский</p>';
 		btnLang.classList.add('ru');
@@ -148,7 +153,15 @@ keyboard.addEventListener('click', (event) => {
 	startSel = input.selectionStart;
 	endSel = input.selectionEnd;
 	if (event.target.closest('.key.number') || event.target.closest('.key.letter')) {
-		input.value = input.value.substring(0, startSel) + event.target.closest('.key').firstElementChild.innerHTML + input.value.substring(endSel);
+		if (event.target.closest('.key[data-keycode = Digit7]') && document.querySelector('.shift').classList.contains('active-up') && lang === 'en') {
+			input.value = `${input.value.substring(0, startSel)}&${input.value.substring(endSel)}`;
+		} else if (event.target.closest('.key[data-keycode = Comma]') && document.querySelector('.shift').classList.contains('active-up') && lang === 'en') {
+			input.value = `${input.value.substring(0, startSel)}<${input.value.substring(endSel)}`;
+		} else if (event.target.closest('.key[data-keycode = Period]') && document.querySelector('.shift').classList.contains('active-up') && lang === 'en') {
+			input.value = `${input.value.substring(0, startSel)}>${input.value.substring(endSel)}`;
+		} else {
+			input.value = input.value.substring(0, startSel) + event.target.closest('.key').firstElementChild.innerHTML + input.value.substring(endSel);
+		}
 		startSel += 1;
 		endSel += 1;
 		input.selectionStart = startSel;
