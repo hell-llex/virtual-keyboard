@@ -39,7 +39,7 @@ function createElem(a, b, c, f, n) {
 	}
 }
 
-adminInfo.innerHTML = '<p>I created this keyboard Windows 11. <br> Swich lang Shift + Alt </p>';
+adminInfo.innerHTML = '<p>I created this keyboard Windows 11. <br> Swich lang Shift + Alt. </p>';
 
 createElem('div', keyboard, 'append', 'row-keys', 5);
 const	rowsKeys = document.querySelectorAll('.row-keys');
@@ -290,12 +290,6 @@ window.addEventListener('keydown', (event) => {
 		input.selectionStart = startSel;
 		input.selectionEnd = startSel;
 	}
-	if (event.code === 'AltLeft' && (event.shiftKey)) {
-		if (lang === 'en') lang = 'ru'; else lang = 'en';
-		if (document.querySelector('.capslock').classList.contains('active-up')) {
-			swichLang('up');
-		} else swichLang('low');
-	}
 	if (event.code === 'ArrowUp') {
 		input.value = `${input.value.substring(0, startSel)}↑${input.value.substring(endSel)}`;
 		startSel += 1;
@@ -331,10 +325,27 @@ window.addEventListener('keydown', (event) => {
 		} else {
 			swichLang('low');
 		}
+	} else if (event.code === 'AltLeft' && event.shiftKey) {
+		if (lang === 'en') lang = 'ru'; else lang = 'en';
+		if (document.querySelector('.shift[data-keycode = ShiftLeft]').classList.add('active-up')) {
+			swichLang('up');
+		} else swichLang('low');
+		document.querySelector(`.key[data-keycode = ${event.code}]`).classList.add('active');
+	} else if ((event.code === 'ShiftLeft' || event.code === 'ShiftRight') && event.code !== 'AltLeft') {
+		document.querySelector('.shift[data-keycode = ShiftLeft]').classList.add('active-up');
+		document.querySelector('.shift[data-keycode = ShiftRight]').classList.add('active-up');
+		if (document.querySelector('.key[data-keycode = KeyZ] > p').outerHTML === '<p>я</p>' || document.querySelector('.key[data-keycode = KeyZ] > p').outerHTML === '<p>z</p>') {
+			swichLang('up');
+		}
+		document.querySelector(`.key[data-keycode = ${event.code}]`).classList.add('active');
 	} else {
 		document.querySelector(`.key[data-keycode = ${event.code}]`).classList.add('active');
-		document.addEventListener('keyup', (ev) => {
-			document.querySelector(`.key[data-keycode = ${ev.code}]`).classList.remove('active');
-		});
 	}
+});
+document.addEventListener('keyup', (ev) => {
+	if (ev.code === 'ShiftLeft' || ev.code === 'ShiftRight') {
+		document.querySelector('.shift[data-keycode = ShiftLeft]').classList.remove('active-up', 'active');
+		document.querySelector('.shift[data-keycode = ShiftRight]').classList.remove('active-up', 'active');
+		swichLang('low');
+	} else document.querySelector(`.key[data-keycode = ${ev.code}]`).classList.remove('active');
 });
