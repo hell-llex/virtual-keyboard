@@ -327,7 +327,7 @@ window.addEventListener('keydown', (event) => {
 		}
 	} else if (event.code === 'AltLeft' && event.shiftKey) {
 		if (lang === 'en') lang = 'ru'; else lang = 'en';
-		if (document.querySelector('.shift[data-keycode = ShiftLeft]').classList.add('active-up')) {
+		if (document.querySelector('.shift[data-keycode = ShiftLeft]').classList.contains('active-up')) {
 			swichLang('up');
 		} else swichLang('low');
 		document.querySelector(`.key[data-keycode = ${event.code}]`).classList.add('active');
@@ -338,6 +338,9 @@ window.addEventListener('keydown', (event) => {
 			swichLang('up');
 		}
 		document.querySelector(`.key[data-keycode = ${event.code}]`).classList.add('active');
+		if (document.querySelector('.capslock').classList.contains('active-up')) {
+			swichLang('low');
+		}
 	} else {
 		document.querySelector(`.key[data-keycode = ${event.code}]`).classList.add('active');
 	}
@@ -347,5 +350,8 @@ document.addEventListener('keyup', (ev) => {
 		document.querySelector('.shift[data-keycode = ShiftLeft]').classList.remove('active-up', 'active');
 		document.querySelector('.shift[data-keycode = ShiftRight]').classList.remove('active-up', 'active');
 		swichLang('low');
+		if (document.querySelector('.capslock').classList.contains('active-up')) {
+			swichLang('up');
+		}
 	} else document.querySelector(`.key[data-keycode = ${ev.code}]`).classList.remove('active');
 });
